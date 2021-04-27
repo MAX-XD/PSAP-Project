@@ -1,1 +1,659 @@
+#include<stdio.h>
+#include<conio.h>
+#include<strings.h>
+#include<stdlib.h>
+
+struct student
+{
+char nm[25];
+char prn[10];
+char batch[5];
+char sec[5];
+char dep[5];
+char phone[15];
+char add[50];
+char sem[2];
+} stud;
+void addstudent(void);
+void displaystudent(void);
+void searchattendance(void);
+int srch(int);
+int searchstudent(void);
+void attendance(void);
+void peratten(void);
+void defaulter(void);
+void marks(void);
+void searchmarks(void);
+void assignment(void);
+void searchassignment(void);
+void logout(void);
+
+int main()
+{
+    char tid[100]="HBS";
+    char tpass[100]="HBS1234";
+    //front page
+    char lid[100];  // login id from user
+    char lpass[100];  // login pass from user
+    int t,ch;
+    //Storing names of all teacher in a file using struct
+    system("COLOR 0B");
+    struct teachername
+    {
+    char tid[100];
+    char tpass[100];
+    char tname[50];
+    };
+    struct teachername nameptr={"HBS","HBS1234","Hemant Shinde"};
+     FILE *tnmptr;
+    tnmptr=fopen("D:\\teachernames.txt","w");
+    fwrite(&nameptr,sizeof(nameptr),1,tnmptr);
+    fclose(tnmptr);
+    fflush(stdin);
+    printf("Enter Credentials \n");
+    while(t=1)
+    {
+    system("cls");
+    printf("Enter Login ID : ");
+    gets(lid);
+    printf("Enter Password : ");
+    gets(lpass);
+    if(strcmp(lid,tid)==0)
+    {
+        if(strcmp(lpass,tpass)==0)
+        {   system("cls");
+            printf("\n\nWelcome %s sir to Dashboard \n",nameptr.tname);
+            break;
+        }
+        else
+            {
+            printf("\n Invalid Credintials \n");
+            printf("Enter any key to continue:\n");
+            getch();
+            main();
+        continue;
+            }
+ }
+    printf("\n Invalid Credentials \n");
+    printf("Enter any key to continue:\n");
+    getch();
+    main();
+    }
+while(t=1) //for continue the loop until break
+{
+
+  printf("\n\nPress \n 1:Add student to database \n 2:Display Student Information \n 3:Search Student \n 4:Take Today's attendance\n 5:Search Attendance by date\n 6:Percentage Attendance\n 7:Store Marks of Students \n 8:Display Marks of all students \n 9:Assignment Submissions \n 10:View Assignment Submissions (By date) \n 11:Check Defaulter List \n 12:Logout \n") ;
+  printf("\nYour Choice : ");
+  scanf("%d",&ch);
+  switch(ch)
+  {
+      case 1:{addstudent();
+      break;
+      }
+      case 2:{displaystudent();
+        break;
+      }
+      case 3:{   searchstudent();
+        break;
+      }
+      case 4:{ attendance();
+        break;
+      }
+      case 5: {
+      searchattendance();
+      break;
+      }
+      case 6:{
+      peratten();
+      break;
+      }
+      case 7:{
+          marks();
+      break;
+      }
+      case 8:{
+          searchmarks();
+      break;
+      }
+      case 9:{
+      assignment();
+      break;
+      }
+      case 10:{
+      searchassignment();
+      break;
+      }
+      case 11:{
+      defaulter();
+      break;
+      }
+      case 12:{
+      logout();
+      break;
+      }
+      default :{
+      printf("Invalid Input ");
+      }
+  }
+}
+}
+void addstudent(void)
+{
+fflush(stdin);
+int i;
+FILE *sptr;
+sptr=fopen("D:\\student_details.txt","a");
+system("cls");
+printf("Enter details of Student \n\n");
+printf("Enter Student Name :");
+scanf("%s",stud.nm);
+printf("Enter Student PRN :");
+scanf("%s",stud.prn);
+printf("Enter Batch :");
+scanf("%s",stud.batch);
+printf("Enter Section :");
+scanf("%s",stud.sec);
+printf("Enter Dep : ");
+scanf("%s",stud.dep);;
+printf("Enter Mobile : ");
+scanf("%s",stud.phone);
+printf("City : ");
+scanf("%s",stud.add);
+printf("Enter Sem : ");
+scanf("%s",stud.sem);
+fwrite(&stud,sizeof(stud),1,sptr);
+printf("Details stored \n");
+fclose(sptr);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+}
+void displaystudent(void)
+{
+fflush(stdin);
+FILE *dsptr;
+dsptr=fopen("D:\\student_details.txt","r");
+system("cls");
+printf("List of all students \n");
+while(fread(&stud,sizeof(stud),1,dsptr)!=NULL)
+{
+    printf("Name : %s \n PRN : %s \n Batch: %s \n Section : %s \n Dep: %s \n Mobile : %s \n City : %s \n Sem : %s \n\n",stud.nm,stud.prn,stud.batch,stud.sec,stud.dep,stud.phone,stud.add,stud.sem);
+}
+fclose(dsptr);
+printf("Enter any key");
+getch();
+system("cls");
+}
+int searchstudent(void)
+{
+    int check=0;
+    fflush(stdin);
+FILE *sptr;
+sptr=fopen("D:\\student_details.txt","r");
+system("cls");
+if(sptr==NULL)
+{
+    printf("Error");
+}
+else {
+while(fread(&stud,sizeof(stud),1,sptr))
+{
+    check=check+1;
+      // to find number of structures present
+}
+fclose(sptr);
+srch(check);
+}
+}
+int srch(int check)
+{
+fflush(stdin);
+int compare=0;
+FILE *s2ptr;
+s2ptr=fopen("D:\\student_details.txt","r");
+char id[10];
+system("cls");
+printf("Enter PRN to search \n");
+scanf("%s",id);
+while(fread(&stud,sizeof(stud),1,s2ptr))
+{
+    if(strcmp(id,stud.prn)==0)
+    {
+        printf("Student found \n");
+        printf("Name : %s  Depart: %s \n",stud.nm,stud.phone);
+        break;
+    }
+    compare=compare+1;
+    if(compare==check)
+    {
+        printf("Student not found \n");
+        break;
+    }
+}
+fclose(s2ptr);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+return 0;
+}
+void attendance(void)
+{
+fflush(stdin);
+ FILE *atdnptr;
+ FILE *srec;
+ char date[30];
+ system("cls");
+ printf("Enter todays date in (DD-MM-YYYY) format \n");
+ char tempfile[500]="D:\\";
+ printf("Enter date \n"
+);
+ scanf("%s",date);
+ strcat(tempfile,date);
+ strcat(tempfile,".txt");
+ // creating txt file for specified date .
+srec=fopen("D:\\student_details.txt","r"); //taking attendace of students
+int atten,x=0,y=0;
+atdnptr=fopen(tempfile,"a");
+ while(fread(&stud,sizeof(stud),1,srec)!=NULL)
+ {
+     printf("%s  %s",stud.nm,stud.prn);
+     fprintf(atdnptr,"\n");
+     fprintf(atdnptr,stud.nm);
+     fprintf(atdnptr,"\t");
+     fprintf(atdnptr,stud.prn);
+     fprintf(atdnptr,"\t");
+     printf("\nEnter \n Present 1 or Absent 0 \n");
+     scanf("%d",&atten);
+     if(atten==1){
+            x=x+1;
+     fprintf(atdnptr,"%s","Present");
+     }
+    else if(atten==0)
+    {
+        y=y+1;
+         fprintf(atdnptr,"%s","Absent");
+    }
+ }
+ printf("\nToday's Present student %d \n",x);
+ printf("\nToday's Absent student %d",y);
+ fclose(atdnptr);
+ fclose(srec);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+}
+void searchattendance(void)
+{   fflush(stdin);
+    char fileloc[100]="D:\\";
+    char date[100];
+    char str[1000];
+    system("cls");
+    printf("Search Attendance on a particular date \n Enter date on format DD-MM-YYYY \n");
+    scanf("%s",date);
+    strcat(fileloc,date);
+    strcat(fileloc,".txt");
+    FILE *srchatten;
+    srchatten=fopen(fileloc,"r");
+    if(srchatten==NULL)
+    {
+        printf("Attendance not found \n");
+    }
+    else
+    {
+    int i=1;
+    while(fscanf(srchatten,"%s",str)!=EOF)
+    {
+    if(i<=3)
+    {
+        printf(str);
+        printf("\t");
+        i++;
+    }
+    else if(i>3)
+    {
+        printf("\n");
+        printf(str);
+        printf("\t");
+        i=1;
+    }
+ }
+}
+fclose(srchatten);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+}
+void peratten(void) //Pratik Gaikwad
+{
+char name[50];
+int n,i;
+float attendance,held;
+float div;
+float percent;
+FILE *peratt;
+system("cls");
+printf("Enter number of students :");
+scanf("%d",&n);
+
+peratt=fopen("D:\\percentage.txt","a");
+
+
+for(i=0;i<n;++i){
+printf("For student %d \n Enter name:",i+1);
+scanf("%s",&name);
+
+printf("Enter number of classes held\n");
+scanf("%f", &held);
+printf("Enter number of classes attended\n");
+scanf("%f", &attendance);
+div=(attendance/held);
+percent=(div)*100;
+
+printf("\npercent attendance of Student: %f\n",percent);
+
+if (percent<= 75.00)
+    {
+        fprintf(peratt,"%s",name);
+        fprintf(peratt,"\t");
+        fprintf(peratt,"%f",percent);
+        fprintf(peratt,"\n");
+        printf("\nStudent is not allowed to sit for the exam\n");
+    }
+
+else
+    {
+
+        printf("\nStudent is allowed to sit for the exam\n");
+    }
+
+}
+    fclose(peratt);
+    printf("\nEnter any key");
+    getch();
+    system("cls");
+
+
+}
+
+void defaulter(void) //Pratik Gaikwad
+{
+    fflush(stdin);
+ FILE *defptr;
+ char debuff[1000];
+ defptr=fopen("D:\\percentage.txt","r");
+ system("cls");
+ if(defptr==NULL)
+ {
+     printf("There are no Students in Defaulter List \n");
+ }
+ else
+ {  int i=1;
+     printf("\n");
+     while(fscanf(defptr,"%s",debuff)!=EOF)
+     {
+         if(i<=2)
+         {
+             printf(debuff);
+             printf("\t");
+             i++;
+         }
+         else
+            {
+            printf("\n");
+            printf(debuff);
+            printf("\t");
+            i=2;
+            }
+
+
+     }
+  fclose(defptr);
+  printf("\nEnter any key");
+  getch();
+  system("cls");
+
+
+ }
+
+
+}
+
+void marks(void) // Adwait Gaikwad
+{
+ fflush(stdin);
+ FILE *mptr;
+ FILE *mrec;
+ char scode[30];
+ char tempfile[500]="D:\\";
+ system("cls");
+ printf("Enter subject code \n");
+ scanf("%s",scode);
+ strcat(tempfile,scode);
+ strcat(tempfile,".txt");
+ // creating txt file for specified subject .
+
+mrec=fopen("D:\\student_details.txt","r"); //taking marks of students
+int marks;
+
+mptr=fopen(tempfile,"a");
+ while(fread(&stud,sizeof(stud),1,mrec))
+ {
+     printf("%s  %s",stud.nm,stud.prn);
+     fprintf(mptr,"\n");
+     fprintf(mptr,stud.nm);
+     fprintf(mptr,"\t");
+     fprintf(mptr,stud.prn);
+     fprintf(mptr,"\t");
+     printf("\nEnter \n marks from 0 to 100 \n");
+     scanf("%d",&marks);
+     if(marks<40 && marks>=0)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","Fail");
+    }
+    else if(marks<50 && marks>=40)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","C");
+    }
+    else if(marks<60 && marks>=50)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","C+");
+    }
+    else if(marks<70 && marks>=60)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","B");
+    }
+    else if(marks<80 && marks>=70)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","B+");
+    }
+    else if(marks<90 && marks>=80)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","A");
+    }
+    else if(marks<=100 && marks>=90)
+    {
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%d",marks);
+        fprintf(mptr,"\t");
+        fprintf(mptr,"%s","A+");
+    }
+    fprintf(mptr,"\n");
+ }
+ fclose(mptr);
+ fclose(mrec);
+ printf("\nEnter any key");
+ getch();
+ system("cls");
+
+}
+
+void searchmarks(void) //Adwait Gaikwad
+{   fflush(stdin);
+    char buff[1000];
+    char fileloc[100]="D:\\";
+    char smcode[100];
+    char str[1000];
+    system("cls");
+    printf("Search marks of student \n Enter subject code :\n");
+    scanf("%s",smcode);
+    strcat(fileloc,smcode);
+    strcat(fileloc,".txt");
+
+    FILE *srchmarks;
+    srchmarks=fopen(fileloc,"r");
+    if(srchmarks==NULL)
+    {
+        printf("marks not found \n");
+    }
+    else
+    {
+    int i=1;
+    while(fscanf(srchmarks,"%s",buff)!=EOF)
+    {
+       if(i<=4)
+       {
+           printf(buff);
+           printf("\t");
+           i++;
+       }
+
+        if(i>4)
+        {
+            printf("\n");
+            printf(buff);
+            i=2;
+        }
+    }
+    }
+    fclose(srchmarks);
+    printf("\nEnter any key");
+    getch();
+    system("cls");
+
+}
+
+void assignment(void) // Pranay Gaidhane
+{
+fflush(stdin);
+    FILE *assptr;
+    FILE *rec;
+    char date_assign[30];
+    system("cls");
+    printf("Enter assignment date in (DD-MM-YYYY) format \n");
+    char assignfile[500]="D:\\assign\\";
+    printf("Enter date \n");
+    scanf("%s", date_assign);
+    strcat(assignfile,date_assign);
+    strcat(assignfile,".txt");
+    rec=fopen("D:\\student_details.txt","r");
+    int assign,x=0,y=0;
+
+    assptr=fopen(assignfile,"a");
+
+    while (fread(&stud,sizeof(stud),1,rec)!=NULL)
+        {
+     printf("%s  %s",stud.nm,stud.prn);
+     fprintf(assptr,"\n");
+     fprintf(assptr,stud.nm);
+     fprintf(assptr,"\t");
+     fprintf(assptr,stud.prn);
+     fprintf(assptr,"\t");
+     printf("\nEnter \n Done (1) or Not Done (0) \n");
+     scanf("%d",&assign);
+     if(assign==1){
+            x=x+1;
+     fprintf(assptr,"%s","Done");
+     }
+    else if(assign==0)
+    {
+        y=y+1;
+         fprintf(assptr,"%s","Not Done");
+    }
+}
+fclose(assptr);
+fclose(rec);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+}
+
+void searchassignment(void) //Pranay Gaidhane
+{
+    fflush(stdin);
+
+    FILE *srchassign;
+    char fileloc[100]="D:\\assign\\";
+    char date1[100];
+    char str[1000];
+    system("cls");
+    printf("Search assignment  \n enter date on format DD-MM-YYYY \n");
+    scanf("%s",date1);
+    strcat(fileloc,date1);
+    strcat(fileloc,".txt");
+
+    srchassign=fopen(fileloc,"r");
+    int j=1;
+    if(srchassign==NULL)
+    {
+        printf("Assignment NOT Found \n ");
+    }
+    else {
+    while (fscanf(srchassign,"%s",str)!=EOF)
+    {
+
+     if(j<=3)
+     {
+         printf(str);
+         printf("\t");
+         j++;
+
+     }
+     else
+    {
+        printf("\n");
+        printf(str);
+        printf("\t");
+        j=2;
+
+    }
+
+    }
+
+
+    }
+fclose(srchassign);
+printf("\nEnter any key");
+getch();
+system("cls");
+
+}
+
+void logout(void)
+{
+  system("cls");
+  main();
+}
 
